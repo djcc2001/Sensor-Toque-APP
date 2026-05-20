@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sensor IoT</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="bg"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div></div>
+
+<div class="wrapper">
+
+  <div class="header">
+    <div class="header-left">
+      <h1>Sensor <em>IoT</em></h1>
+      <p>TTP223 — ESP32 GPIO14</p>
+    </div>
+    <div class="toggle-wrap">
+      <span class="toggle-label">Sensor</span>
+      <label class="toggle">
+        <input type="checkbox" id="toggle-sensor" checked onchange="toggleSensor()">
+        <span class="toggle-slider"></span>
+      </label>
+      <span class="toggle-status on" id="toggle-text">ON</span>
+    </div>
+  </div>
+
+  <div class="stats">
+    <div class="stat">
+      <div class="stat-label">ESTADO ACTUAL</div>
+      <div class="stat-val low" id="estado-val">LOW</div>
+      <div class="live-indicator">
+        <div class="live-dot" id="live-dot"></div>
+        <span class="live-text" id="live-text">sin toque</span>
+      </div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">TOQUES TOTALES</div>
+      <div class="stat-val" id="total-val">0</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">ÚLTIMO TOQUE</div>
+      <div class="stat-val" id="ultimo-val" style="font-size:18px;">--</div>
+    </div>
+  </div>
+
+  <div class="grafica-card">
+    <div class="grafica-header">
+      <div>
+        <div class="grafica-title">Diagrama de señal en tiempo real</div>
+        <div class="grafica-subtitle">últimos 60 segundos</div>
+      </div>
+      <button class="btn-small" onclick="limpiarGrafica()">🗑 Limpiar</button>
+    </div>
+    <div class="canvas-wrap">
+      <canvas id="grafica"></canvas>
+    </div>
+    <div class="grafica-labels">
+      <span class="grafica-label">-60s</span>
+      <span class="grafica-label">-45s</span>
+      <span class="grafica-label">-30s</span>
+      <span class="grafica-label">-15s</span>
+      <span class="grafica-label">ahora</span>
+    </div>
+  </div>
+
+  <button class="btn-historial" onclick="abrirModal()">📋 Ver historial de toques</button>
+
+</div>
+
+<!-- Modal -->
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title">📋 Historial de toques</span>
+      <button class="modal-close" onclick="cerrarModal()">✕</button>
+    </div>
+    <div class="fecha-selector">
+      <input type="date" class="fecha-input" id="modal-fecha">
+      <button class="btn-buscar" onclick="buscarReporteModal()">Buscar</button>
+    </div>
+    <div class="modal-stats">
+      <div class="modal-stat">
+        <div class="modal-stat-val" id="modal-total">0</div>
+        <div class="modal-stat-label">toques del día</div>
+      </div>
+      <div class="modal-stat">
+        <div class="modal-stat-val" id="modal-duracion-avg">--</div>
+        <div class="modal-stat-label">duración promedio</div>
+      </div>
+    </div>
+    <div id="modal-contenido">
+      <div class="no-datos">Selecciona una fecha</div>
+    </div>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>

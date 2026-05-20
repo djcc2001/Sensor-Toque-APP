@@ -1,0 +1,5 @@
+informe/
+
+**/build/
+!**/src/**/build/
+gradle/wrapper/gradle-wrapper.jar
