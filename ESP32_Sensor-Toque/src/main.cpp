@@ -10,9 +10,7 @@
 #define PIN_BOOT    0
 #define DEBOUNCE_MS 80
 
-const char* WS_HOST = "3.131.82.32";
-const int   WS_PORT = 3001;
-const char* WS_PATH = "/";
+#include "config.h"
 
 bool controlActivo = true;
 bool wsConectado = false;

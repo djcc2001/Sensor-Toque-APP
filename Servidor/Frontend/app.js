@@ -1,12 +1,14 @@
-const WS_URL   = 'ws://3.131.82.32:3001';
-const API_BASE = 'http://3.131.82.32:3002';
+const WS_URL   = 'ws://' + (process.env.WS_HOST || '3.131.82.32') + ':' + (process.env.WS_PORT || '3001');
+const API_BASE = 'http://' + (process.env.WS_HOST || '3.131.82.32') + ':' + (process.env.WS_PORT || '3002');
 
 // ── GRÁFICA ──────────────────────────────────────────
 const MAX_PUNTOS = 300;
+const MAX_MINUTOS = 60;     // datos mayores a N minutos se descartan
 let datos             = new Array(MAX_PUNTOS).fill(0);
 let señalActualLocal  = 0;
 let sensorActivoLocal = true;
 let pausado           = false;
+let tiempoInicioSesal = Date.now(); // marca de tiempo para límite de sesión
 
 const canvas = document.getElementById('grafica');
 const ctx    = canvas.getContext('2d');
@@ -70,6 +72,14 @@ setInterval(() => {
   if (pausado) return;
   datos.push(señalActualLocal);
   if (datos.length > MAX_PUNTOS) datos.shift();
+
+  // Límite de tiempo: descartar datos más viejos que MAX_MINUTOS
+  const ahora = Date.now();
+  if (ahora - tiempoInicioSesal > MAX_MINUTOS * 60 * 1000) {
+    datos = new Array(MAX_PUNTOS).fill(0);
+    señalActualLocal = 0;
+    tiempoInicioSesal = ahora;
+  }
   dibujarGrafica();
 }, 200);
 

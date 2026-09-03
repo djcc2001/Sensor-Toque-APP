@@ -102,7 +102,7 @@ SensorViewModel  ──────►  SensorScreen (Jetpack Compose)
 
 - Android **8.0 (API 26)** o superior
 - Conexión a Internet (WiFi o datos móviles)
-- El servidor WebSocket debe estar corriendo en `ws://3.131.82.32:3001`
+- El servidor WebSocket debe estar corriendo en `ws://3.131.82.32:3001` (definir en `util/Constants.kt`)
 
 ---
 
@@ -131,7 +131,7 @@ res/raw/
 En `WebSocketService.kt`, ajusta la constante si cambias el servidor:
 
 ```kotlin
-const val WS_URL = "ws://3.131.82.32:3001"
+// IP centralizada en util/Constants.kt
 ```
 
 ### 4. Compilar y ejecutar

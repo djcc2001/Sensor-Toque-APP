@@ -10,9 +10,17 @@ app.use(express.json());
 
 const DATA_FILE = path.join(__dirname, 'toques.json');
 
+const WS_HOST = process.env.WS_HOST || '3.131.82.32';
+const WS_PORT = process.env.WS_PORT ? parseInt(process.env.WS_PORT, 10) : 3001;
+
 function cargarDatos() {
   if (!fs.existsSync(DATA_FILE)) fs.writeFileSync(DATA_FILE, JSON.stringify({}));
-  return JSON.parse(fs.readFileSync(DATA_FILE, 'utf8'));
+  try {
+    return JSON.parse(fs.readFileSync(DATA_FILE, 'utf8'));
+  } catch (e) {
+    console.log(`[DATA] Error cargando ${DATA_FILE}, usando vacío`);
+    return {};
+  }
 }
 
 function guardarDatos(datos) {
@@ -58,7 +66,7 @@ let estado = {
 let toqueInicio    = null;
 let toqueInicioStr = null;
 
-const wss = new WebSocket.Server({ port: 3001 });
+const wss = new WebSocket.Server({ port: WS_PORT });
 
 // ── BROADCAST A TODOS LOS CLIENTES ────────────────────
 function broadcast(extra = {}) {

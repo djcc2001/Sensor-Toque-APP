@@ -190,6 +190,17 @@ Consulta el [README de la app Android](Android/SensorIoT/README.md) para instruc
 
 ---
 
+## :rotating_light: Limitaciones conocidas
+
+- **Comunicación WebSocket sin cifrar**: El uso de `ws://` sin TLS/WSS significa que los datos van en texto plano. No hay encriptación de extremo a extremo.
+- **Autenticación débil**: No hay validación de credenciales ni headers de autorización en la conexión WebSocket. Cualquier cliente que conozca la IP/puerto puede conectarse y enviar comandos.
+- **IP del servidor debe configurarse**: Antes de desplegar o probar, la dirección IP del servidor AWS debe actualizarse en las tres capas (ESP32 `config.h`, backend `WS_HOST` env var, app `util/Constants.kt`). El proyecto viene con la IP de ejemplo `3.131.82.32` que corresponde a un servidor dado de baja.
+- **Sesiones largas**: El dashboard acumula datos de gráfica indefinidamente (aunque con límite de puntos móviles de 300 ≈ 60 segundos). Para sesiones prolongadas, se recomienda reiniciar la gráfica periódicamente.
+- **Sin persistencia del estado del sensor**: Si el servidor o la red se reinician, el estado del sensor se pierde y requiere reconexión.
+
+---
+
+## :file_folder: Estructura del repositorio
 ## 📈 Rendimiento
 
 | Métrica | Valor |

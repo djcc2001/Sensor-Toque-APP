@@ -30,9 +30,10 @@ class WebSocketService : Service() {
         const val CHANNEL_APAGADO_ID  = "sensor_apagado_channel"
         const val NOTIF_FOREGROUND_ID = 1
         const val NOTIF_ALERTA_ID     = 2
-        const val WS_URL              = "ws://3.131.82.32:3001"
 
         @Volatile var estadoActual: SensorEstado = SensorEstado.DESCONECTADO
+
+        @Volatile var wsUrl: String = Constants.WS_URL
 
         // Solo invocado desde el main thread (ver notificarUI)
         var onEstadoCambiado: ((SensorEstado) -> Unit)? = null
@@ -95,7 +96,7 @@ class WebSocketService : Service() {
         webSocket?.close(1000, "Reconectando...")
         webSocket = null
 
-        val request = Request.Builder().url(WS_URL).build()
+        val request = Request.Builder().url(wsUrl).build()
         webSocket = client.newWebSocket(request, object : WebSocketListener() {
 
             override fun onOpen(webSocket: WebSocket, response: Response) {
@@ -365,12 +366,18 @@ class WebSocketService : Service() {
         } catch (e: Exception) {
             e.printStackTrace()
         } finally {
-            // Liberar el WakeLock después de un tiempo prudencial
+            // Liberar el WakeLock después de un tiempo prudencial.
+            // El bloque finally garantiza liberación incluso en ramas de excepción.
             mainHandler.postDelayed({
                 if (wakeLock.isHeld) wakeLock.release()
             }, 4000)
         }
     }
+
+    // ─── Liberación garantizada de WakeLock ──────────────────────────────
+    // Ambos métodos enviarNotificacionCritica y abrirAppEnPrimerPlano usan
+    // try/finally para asegurar que el WakeLock se libere en TODAS las
+    // ramas (excepción o no), evitando que el CPU se quede bloqueado.
 
     private fun abrirAppEnPrimerPlano() {
         val powerManager = getSystemService(POWER_SERVICE) as PowerManager

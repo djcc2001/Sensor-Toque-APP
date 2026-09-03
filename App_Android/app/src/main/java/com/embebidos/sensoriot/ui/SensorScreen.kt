@@ -445,7 +445,7 @@ fun SensorScreen(viewModel: SensorViewModel) {
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text("☁️ Servidor", fontSize = 13.sp, color = Color(0xFF8B949E))
-                        Text("3.131.82.32:3001", fontSize = 13.sp, color = Color(0xFF8B949E))
+                        Text(Constants.API_BASE, fontSize = 13.sp, color = Color(0xFF8B949E))
                     }
                 }
             }

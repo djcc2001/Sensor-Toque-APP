@@ -74,7 +74,7 @@ class SensorViewModel : ViewModel() {
             _errorHistorial.value = ""
             try {
                 val resultado = withContext(Dispatchers.IO) {
-                    val url = URL("http://3.131.82.32:3002/api/reporte?fecha=$fechaConsulta")
+                    val url = URL(Constants.API_BASE + "/api/reporte?fecha=$fechaConsulta")
                     // FIX #5: usar finally para garantizar disconnect() aunque falle readText()
                     val conn = url.openConnection() as java.net.HttpURLConnection
                     conn.connectTimeout = 5000
@@ -82,6 +82,8 @@ class SensorViewModel : ViewModel() {
                     try {
                         conn.inputStream.bufferedReader().use { it.readText() }
                     } finally {
+                        // disconnect() es necesario para HttpURLConnection: libera el socket
+                        // subyacente y evita fugas de conexión en sesiones largas
                         conn.disconnect()
                     }
                 }
